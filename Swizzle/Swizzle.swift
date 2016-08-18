@@ -23,12 +23,37 @@ internal func swizzleMethodOf(var class_: AnyClass!, replace selector1: Selector
     }
 }
 
+internal func addMethodFrom(var class1: AnyClass!, selector: Selector, var toClass class2: AnyClass!, isClassMethod: Bool, replace: Bool) -> Bool {
+    if isClassMethod {
+        class1 = object_getClass(class1)
+        class2 = object_getClass(class2)
+    }
+    
+    let method: Method = class_getInstanceMethod(class1, selector)
+    
+    let didAddMethod = class_addMethod(class2, selector, method_getImplementation(method), method_getTypeEncoding(method))
+    if !didAddMethod && replace {
+        class_replaceMethod(class2, selector, method_getImplementation(method), method_getTypeEncoding(method))
+        return true
+    } else {
+        return didAddMethod
+    }
+}
+
 public func swizzleInstanceMethod(var class_: AnyClass!, sel1: Selector, sel2: Selector) {
     swizzleMethodOf(class_, replace: sel1, by: sel2, isClassMethod: false)
 }
 
 public func swizzleClassMethod(var class_: AnyClass!, sel1: Selector, sel2: Selector) {
     swizzleMethodOf(class_, replace: sel1, by: sel2, isClassMethod: true)
+}
+
+public func addInstanceMethod(var class1: AnyClass!, selector: Selector, var toClass class2: AnyClass!, replace: Bool = false) -> Bool {
+    return addMethodFrom(class1, selector: selector, toClass: class2, isClassMethod: false, replace: replace)
+}
+
+public func addClassMethod(var class1: AnyClass!, selector: Selector, var toClass class2: AnyClass!, replace: Bool = false) -> Bool {
+    return addMethodFrom(class1, selector: selector, toClass: class2, isClassMethod: true, replace: replace)
 }
 
 //--------------------------------------------------
