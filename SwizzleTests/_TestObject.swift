@@ -36,9 +36,9 @@ class MyObject: NSObject {
         return "MyObject+bonjour"
     }
 
-    let deinitClosure: (Void -> Void)?
+    let deinitClosure: ((Void) -> Void)?
 
-    init(deinitClosure: (Void -> Void)? = nil) {
+    init(deinitClosure: ((Void) -> Void)? = nil) {
         self.deinitClosure = deinitClosure
         super.init()
 
