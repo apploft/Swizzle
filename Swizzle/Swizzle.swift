@@ -14,8 +14,8 @@ internal func swizzleMethodOf(_ class_: AnyClass!, replace selector1: Selector, 
         class_ = object_getClass(class_)
     }
 
-    let method1: Method = class_getInstanceMethod(class_, selector1)
-    let method2: Method = class_getInstanceMethod(class_, selector2)
+    guard let method1: Method = class_getInstanceMethod(class_, selector1) else { return }
+    guard let method2: Method = class_getInstanceMethod(class_, selector2) else { return }
 
     if class_addMethod(class_, selector1, method_getImplementation(method2), method_getTypeEncoding(method2)) {
         class_replaceMethod(class_, selector2, method_getImplementation(method1), method_getTypeEncoding(method1))
@@ -31,8 +31,8 @@ internal func addMethodFrom(_ class1: AnyClass!, selector: Selector, toClass cla
         class2 = object_getClass(class2)
     }
     
-    let method: Method = class_getInstanceMethod(class1, selector)
-    
+    guard let method: Method = class_getInstanceMethod(class1, selector) else { return false }
+
     let didAddMethod = class_addMethod(class2, selector, method_getImplementation(method), method_getTypeEncoding(method))
     if !didAddMethod && replace {
         class_replaceMethod(class2, selector, method_getImplementation(method), method_getTypeEncoding(method))
