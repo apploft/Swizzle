@@ -8,5 +8,4 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://github.com/inamiy/Swizzle.git', :tag => "#{s.version}" }
   s.source_files = 'Swizzle/*.{h,swift}'
   s.requires_arc = true
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
 end
