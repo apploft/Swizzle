@@ -11,7 +11,7 @@ import XCTest
 
 class SwizzleTests: _TestCase {
     func testSwizzleInstanceMethod() {
-        let swizzle: (Void) -> Void = {
+        let swizzle: () -> Void = {
             swizzleInstanceMethod(NSObject.self, sel1: #selector(NSObject.hello), sel2: #selector(NSObject.bye))
         }
 
@@ -35,7 +35,7 @@ class SwizzleTests: _TestCase {
     }
 
     func testSwizzleClassMethod() {
-        let swizzle: (Void) -> Void = {
+        let swizzle: () -> Void = {
             swizzleClassMethod(NSObject.self, sel1: #selector(NSObject.hello), sel2: #selector(NSObject.bye))
         }
 
@@ -59,7 +59,7 @@ class SwizzleTests: _TestCase {
     }
 
     func testCustomOperator() {
-        let swizzle: (Void) -> Void = {
+        let swizzle: () -> Void = {
             (NSObject.self, #selector(NSObject.hello)) <-> #selector(NSObject.bye)  // swizzleInstanceMethod
             (NSObject.self, #selector(NSObject.hello)) <+> #selector(NSObject.bye)  // swizzleClassMethod
         }
@@ -92,7 +92,7 @@ class SwizzleTests: _TestCase {
     func testSubclass() {
         // NOTE: MyObject-hello is not implemented (uses super-method)
 
-        let swizzle: (Void) -> Void = {
+        let swizzle: () -> Void = {
             (MyObject.self, #selector(NSObject.hello)) <-> #selector(MyObject.bonjour)
             (MyObject.self, #selector(NSObject.hello)) <+> #selector(MyObject.bonjour)
         }
@@ -126,7 +126,7 @@ class SwizzleTests: _TestCase {
     func testSubclass_reversed() {
         // NOTE: MyObject-hello is not implemented (uses super-method)
 
-        let swizzle: (Void) -> Void = {
+        let swizzle: () -> Void = {
             (MyObject.self, #selector(MyObject.bonjour)) <-> #selector(NSObject.hello)  // reversed
             (MyObject.self, #selector(MyObject.bonjour)) <+> #selector(NSObject.hello)  // reversed
         }
@@ -158,9 +158,9 @@ class SwizzleTests: _TestCase {
     }
 
     func testDealloc() {
-        let swizzle: (Void) -> Void = {
+        let swizzle: () -> Void = {
 //            (MyObject.self, "dealloc") <-> "_swift_dealloc"   // comment-out: doesn't work
-            (MyObject.self, "dealloc") <-> "_objc_dealloc"  // NOTE: swizzled_dealloc must be implemented as ObjC code
+            (MyObject.self, #selector(_KeyedEncodingContainerBase.deinit)) <-> "_objc_dealloc"  // NOTE: swizzled_dealloc must be implemented as ObjC code
         }
 
         swizzle()
