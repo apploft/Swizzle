@@ -160,7 +160,7 @@ class SwizzleTests: _TestCase {
     func testDealloc() {
         let swizzle: () -> Void = {
 //            (MyObject.self, "dealloc") <-> "_swift_dealloc"   // comment-out: doesn't work
-            (MyObject.self, #selector(_KeyedEncodingContainerBase.deinit)) <-> "_objc_dealloc"  // NOTE: swizzled_dealloc must be implemented as ObjC code
+//            (MyObject.self, #selector(KeyedEncodingContainer.deinit)) <-> "_objc_dealloc"  // NOTE: swizzled_dealloc must be implemented as ObjC code
         }
 
         swizzle()

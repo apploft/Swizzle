@@ -9,19 +9,19 @@
 import Foundation
 
 extension NSObject {
-    func hello() -> String {
+    @objc func hello() -> String {
         return "NSObject-hello"
     }
 
-    func bye() -> String {
+    @objc func bye() -> String {
         return "NSObject-bye"
     }
 
-    class func hello() -> String {
+    @objc class func hello() -> String {
         return "NSObject+hello"
     }
 
-    class func bye() -> String {
+    @objc class func bye() -> String {
         return "NSObject+bye"
     }
 }
